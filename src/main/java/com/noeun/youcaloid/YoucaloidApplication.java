@@ -8,6 +8,7 @@ public class YoucaloidApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(YoucaloidApplication.class, args);
+		
 	}
 
 }
