@@ -38,5 +38,4 @@ out/
 
 
 ### api key ###
-bin/main/application.properties
-src/main/resources/application.properties
+application-API-KEY.properties
