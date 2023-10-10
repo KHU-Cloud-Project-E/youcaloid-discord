@@ -1,5 +1,5 @@
 package com.noeun.youcaloid;
-
+import java.util.Collections;
 import javax.security.auth.login.LoginException;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +11,7 @@ import com.noeun.youcaloid.bot.BotEventListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 @SpringBootApplication
@@ -32,12 +33,20 @@ public class YoucaloidApplication {
 
 		return builder.build();
 	}
+
+	private static void commandUpdate(JDA jda){
+		jda.updateCommands().addCommands(
+			Commands.slash("test","test command")
+		).queue();
+	}
 	
 	public static void main(String[] args) {
 		SpringApplication.run(YoucaloidApplication.class, args);
 		JDA jda;
 		try{
 			jda = jdaBuild();
+			commandUpdate(jda);
+			
 		} catch (LoginException e){
 			System.out.println("discord bot login error!");
 		}
