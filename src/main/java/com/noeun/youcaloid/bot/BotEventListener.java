@@ -16,7 +16,7 @@ public class BotEventListener extends ListenerAdapter{
         User user = event.getAuthor();
         String message = event.getMessage().getContentRaw();
         System.out.println(event.getChannel().getName() + " _ " +user.getId() + " : "+ message);
-        event.getChannel().sendMessage("receive");
+        //event.getChannel().sendMessage("receive").queue();
 
         AudioChannelUnion connectedChannel = event.getMember().getVoiceState().getChannel();
         if(connectedChannel != null){
@@ -25,6 +25,7 @@ public class BotEventListener extends ListenerAdapter{
                 audioManager.openAudioConnection(connectedChannel);
             }
         }
+        
 
     }
 
