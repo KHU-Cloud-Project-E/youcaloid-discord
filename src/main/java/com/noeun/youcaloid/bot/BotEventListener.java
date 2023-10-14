@@ -27,7 +27,10 @@ public class BotEventListener extends ListenerAdapter{
             try{
             String audioChannelId = audioManager.getConnectedChannel().getId();
                 if( audioManager.isConnected() && connectedChannel.getId().equals(audioChannelId)){
-                    playvoice(message, event.getGuild());
+                    String urlmessage = "http://localhost:5000/aitts?modelid=12344&textmessage=";
+                    urlmessage = urlmessage + message.replace(" ", "%20");
+                    System.out.println(urlmessage);
+                    playvoice(urlmessage, event.getGuild());
                 }
             }catch(NullPointerException e){
                 System.out.println("bot is not in voicechannel.");
