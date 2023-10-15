@@ -10,6 +10,7 @@ import com.noeun.youcaloid.bot.BotEventListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
@@ -35,7 +36,9 @@ public class YoucaloidApplication {
 
 	private static void commandUpdate(JDA jda){
 		jda.updateCommands().addCommands(
-			Commands.slash("test","test command")
+			Commands.slash("test","test command"),
+			Commands.slash("setvoice","/setvoice {your voice model id}}")
+			.addOption(OptionType.STRING, "modelid", "Id for tts model", true)
 		).queue();
 	}
 	
