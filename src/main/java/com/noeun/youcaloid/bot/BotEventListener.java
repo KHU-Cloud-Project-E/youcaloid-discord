@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 
 public class BotEventListener extends ListenerAdapter{
 
-    private HashMap<String, Date> connectTime;
+    private HashMap<AudioManager, Date> connectTime;
 
     public class Gcollect extends Thread {
         @Override
@@ -35,10 +35,11 @@ public class BotEventListener extends ListenerAdapter{
                     e.printStackTrace();
                 }
                 Date nowDate = new Date();
-                for(Entry<String, Date> i : connectTime.entrySet()){
-                    System.out.println(i.getKey());
+                for(Entry<AudioManager, Date> i : connectTime.entrySet()){
+                    System.out.println(i.getKey().getGuild());
                     if(i.getValue().getTime() + 600000 < nowDate.getTime()){
-                        System.out.println("garbage collector successfully out of channel of guild "+i.getKey());
+                        i.getKey().closeAudioConnection();
+                        System.out.println("garbage collector successfully out of channel of guild "+i.getKey().getGuild());
                         connectTime.remove(i.getKey());
                     }
                 }
@@ -67,11 +68,11 @@ public class BotEventListener extends ListenerAdapter{
             AudioManager audioManager = event.getGuild().getAudioManager();
             if((!audioManager.isConnected()) && event.getChannel().getName().equals("ttsvoice")){
                 audioManager.openAudioConnection(connectedChannel);
-                connectTime.put(event.getGuild().getIconId(), new Date());
+                connectTime.put(audioManager, new Date());
             }
             try{
             String audioChannelId = audioManager.getConnectedChannel().getId();
-            connectTime.put(event.getGuild().getIconId(), new Date());
+            connectTime.put(audioManager, new Date());
                 if( audioManager.isConnected() && connectedChannel.getId().equals(audioChannelId)){
                     String urlmessage = "http://localhost:5000/aitts?modelid="+dataBaseService.getModelId(event.getGuild().getId(), user.getId())+"&textmessage=";
                     urlmessage = urlmessage + message.replace(" ", "%20");
