@@ -1,5 +1,6 @@
 package com.noeun.youcaloid.bot;
 
+import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -14,12 +15,44 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 public class BotEventListener extends ListenerAdapter{
+
+    private HashMap<String, Date> connectTime;
+
+    public class Gcollect extends Thread {
+        @Override
+        public void run(){
+            while(true){
+                //System.out.println("collector 1 mv");
+                try {
+                    Thread.sleep(60000);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                Date nowDate = new Date();
+                for(Entry<String, Date> i : connectTime.entrySet()){
+                    System.out.println(i.getKey());
+                    if(i.getValue().getTime() + 600000 < nowDate.getTime()){
+                        System.out.println("garbage collector successfully out of channel of guild "+i.getKey());
+                        connectTime.remove(i.getKey());
+                    }
+                }
+            }
+        }
+    }
 
     private final DataBaseService dataBaseService;
 
     public BotEventListener(){
+        this.connectTime = new HashMap<>();
         this.dataBaseService = new DataBaseService();
+        Thread gc = new Gcollect();
+        gc.start();
     }
 
     @Override
@@ -34,10 +67,11 @@ public class BotEventListener extends ListenerAdapter{
             AudioManager audioManager = event.getGuild().getAudioManager();
             if((!audioManager.isConnected()) && event.getChannel().getName().equals("ttsvoice")){
                 audioManager.openAudioConnection(connectedChannel);
-                
+                connectTime.put(event.getGuild().getIconId(), new Date());
             }
             try{
             String audioChannelId = audioManager.getConnectedChannel().getId();
+            connectTime.put(event.getGuild().getIconId(), new Date());
                 if( audioManager.isConnected() && connectedChannel.getId().equals(audioChannelId)){
                     String urlmessage = "http://localhost:5000/aitts?modelid="+dataBaseService.getModelId(event.getGuild().getId(), user.getId())+"&textmessage=";
                     urlmessage = urlmessage + message.replace(" ", "%20");
