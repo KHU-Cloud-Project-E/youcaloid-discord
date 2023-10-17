@@ -27,7 +27,7 @@ public class YoucaloidApplication {
 	private static JDA jdaBuild() throws LoginException{
 		System.out.println("discode bot key is : "+key);
 		JDABuilder builder = JDABuilder.createDefault(key);
-		builder.setActivity(Activity.playing("아직 개발중"));
+		builder.setActivity(Activity.playing("아직 개발"));
 		builder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
 		builder.addEventListeners(new BotEventListener());
 
