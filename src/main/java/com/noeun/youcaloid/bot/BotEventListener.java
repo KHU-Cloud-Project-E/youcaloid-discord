@@ -70,6 +70,7 @@ public class BotEventListener extends ListenerAdapter{
                 audioManager.openAudioConnection(connectedChannel);
                 connectTime.put(audioManager, new Date());
             }
+            if(event.getChannel().getName().equals("ttsvoice")){
             try{
             String audioChannelId = audioManager.getConnectedChannel().getId();
             connectTime.put(audioManager, new Date());
@@ -82,6 +83,7 @@ public class BotEventListener extends ListenerAdapter{
             }catch(NullPointerException e){
                 System.out.println("bot is not in voicechannel.");
             }  
+        }
         }
         
 
