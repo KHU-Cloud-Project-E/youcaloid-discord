@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "bot.key",
+  "type": "java.lang.String",
+  "description": "private key for discode bot."
+}]}
