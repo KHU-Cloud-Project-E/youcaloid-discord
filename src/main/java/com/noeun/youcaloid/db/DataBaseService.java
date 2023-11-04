@@ -70,4 +70,34 @@ public class DataBaseService {
             String.format("SELECT model_info.DESCRIPTION FROM user_info INNER JOIN model_info ON user_info.MODELID = model_info.MODELID WHERE GUILDID = %s AND USERID = %s",guildId,userId)
             , String.class).get(0);
     }
+
+    public String getModelDec(String modelId){
+         return jdbcTemplate.queryForList(
+            String.format("SELECT DESCRIPTION FROM model_info WHERE MODELID = %s", modelId)
+            , String.class).get(0);
+    }
+
+    public int setMacro(String userId, int macroNum, String modelId){
+        if(jdbcTemplate.queryForList(
+            String.format(
+                "SELECT MODELID FROM model_info WHERE MODELID = %s", 
+                modelId), String.class).size() > 0
+        ){
+            return jdbcTemplate.update("INSERT INTO macro (USERID, MACRONUM, MODELID) VALUES (?, ?, ?)",userId, String.valueOf(macroNum), modelId);
+        }
+
+        return 0;
+    }
+
+    public int changeModel(String guildId, String userId, int macroNum){
+        if(jdbcTemplate.queryForList(String.format(
+            "SELECT MODELID FROM macro WHERE USERID = %s AND MACRONUM = %s", 
+            userId, String.valueOf(macroNum)), String.class).size() > 0){
+                String modelId = jdbcTemplate.queryForList(String.format(
+            "SELECT MODELID FROM macro WHERE USERID = %s AND MACRONUM = %s", 
+            userId, String.valueOf(macroNum)), String.class).get(0);
+            return addModelId(guildId, userId, modelId);
+        }
+        return 0;
+    }
 }

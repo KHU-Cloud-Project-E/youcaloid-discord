@@ -96,6 +96,7 @@ public class BotEventListener extends ListenerAdapter{
         String guildId;
         String modelId;
         int macroNum;
+        int rst;
         switch (event.getName()){
             case "test":
                 event.reply("test command!").queue();
@@ -105,19 +106,25 @@ public class BotEventListener extends ListenerAdapter{
                 guildId = event.getGuild().getId();
                 modelId = event.getOption("modelid", OptionMapping::getAsString);
                 System.out.println(guildId +" "+userId+" "+modelId);
-                int rst = dataBaseService.addModelId(guildId, userId, modelId);
+                rst = dataBaseService.addModelId(guildId, userId, modelId);
                 if(rst == 0) event.reply("invalid model id.").queue();
                 else event.reply("successfully change your model to "+dataBaseService.nowModel(guildId, userId)).queue();
                 break;
             case "setmacro":
                 userId = event.getMember().getId();
                 modelId = event.getOption("modelid", OptionMapping::getAsString);
-                macroNum = Integer.parseInt(event.getOption("MacroNumber", OptionMapping::getAsString));
+                macroNum = Integer.parseInt(event.getOption("macronumber", OptionMapping::getAsString));
+                rst = dataBaseService.setMacro(userId, macroNum, modelId);
+                if(rst == 0) event.reply("invalid model id.").queue();
+                else event.reply("successfully register model " +dataBaseService.getModelDec(modelId) + "to macronumber "+ String.valueOf(macroNum)).queue();
                 break;
             case "changevoice":
                 userId = event.getMember().getId();
                 guildId = event.getGuild().getId();
-                macroNum = Integer.parseInt(event.getOption("MacroNumber", OptionMapping::getAsString));
+                macroNum = Integer.parseInt(event.getOption("macronumber", OptionMapping::getAsString));
+                rst = dataBaseService.changeModel(guildId, userId, macroNum);
+                if(rst == 0) event.reply("invalid model id.").queue();
+                else event.reply("successfully change your model to "+dataBaseService.nowModel(guildId, userId)).queue();
                 break;
         }
     }

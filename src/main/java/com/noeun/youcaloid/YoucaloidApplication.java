@@ -40,10 +40,10 @@ public class YoucaloidApplication {
 			Commands.slash("setvoice","/setvoice {your voice model id}")
 			.addOption(OptionType.STRING, "modelid", "Id for tts model", true),
 			Commands.slash("setmacro","/setmacro {number(1-9)} {your voice model id}")
-			.addOption(OptionType.INTEGER, "MacroNumber", "Macro number for selected model", true )
+			.addOption(OptionType.INTEGER, "macronumber", "Macro number for selected model", true )
 			.addOption(OptionType.STRING, "modelid", "Id for tts model", true),
 			Commands.slash("changevoice","/changevoice {your macro number}")
-			.addOption(OptionType.INTEGER, "MacroNumber", "Macro number for selected model", true)
+			.addOption(OptionType.INTEGER, "macronumber", "Macro number for selected model", true)
 		).queue();
 	}
 	
