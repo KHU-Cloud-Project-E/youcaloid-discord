@@ -75,7 +75,7 @@ public class BotEventListener extends ListenerAdapter{
             String audioChannelId = audioManager.getConnectedChannel().getId();
             connectTime.put(audioManager, new Date());
                 if( audioManager.isConnected() && connectedChannel.getId().equals(audioChannelId)){
-                    String urlmessage = "http://localhost:5000/aitts?modelid="+dataBaseService.getModelId(event.getGuild().getId(), user.getId())+"&textmessage=";
+                    String urlmessage = "http://youcal-voice-service:5000/aitts?modelid="+dataBaseService.getModelId(event.getGuild().getId(), user.getId())+"&textmessage=";
                     urlmessage = urlmessage + message.replace(" ", "%20");
                     System.out.println(urlmessage);
                     playvoice(urlmessage, event.getGuild());

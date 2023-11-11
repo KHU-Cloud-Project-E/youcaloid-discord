@@ -16,7 +16,7 @@ public class DataBaseService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private String url ="jdbc:mariadb://localhost:3306/youcaloid";
+    private String url ="jdbc:mariadb://host.docker.internal:3306/youcaloid";
     private String name = "myadmin";
     private String password = "root";
 
