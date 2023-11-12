@@ -83,7 +83,12 @@ public class DataBaseService {
                 "SELECT MODELID FROM model_info WHERE MODELID = %s", 
                 modelId), String.class).size() > 0
         ){
-            return jdbcTemplate.update("INSERT INTO macro (USERID, MACRONUM, MODELID) VALUES (?, ?, ?)",userId, String.valueOf(macroNum), modelId);
+            if(jdbcTemplate.queryForList(String.format("SELECT MODELID FROM macro WHERE USERID = %s AND MACRONUM = %s", 
+                userId, String.valueOf(macroNum)), String.class).size() > 0){
+                    return jdbcTemplate.update("UPDATE  macro SET MODELID = ? WHERE USERID = ? AND MACRONUM = ?", modelId, userId, String.valueOf(macroNum));
+                }else{
+                    return jdbcTemplate.update("INSERT INTO macro (USERID, MACRONUM, MODELID) VALUES (?, ?, ?)",userId, String.valueOf(macroNum), modelId);
+                }
         }
 
         return 0;
