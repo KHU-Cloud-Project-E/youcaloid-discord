@@ -75,7 +75,7 @@ public class BotEventListener extends ListenerAdapter{
             String audioChannelId = audioManager.getConnectedChannel().getId();
             connectTime.put(audioManager, new Date());
                 if( audioManager.isConnected() && connectedChannel.getId().equals(audioChannelId)){
-                    String urlmessage = "http://localhost:5000/aitts?modelid="+dataBaseService.getModelId(event.getGuild().getId(), user.getId())+"&textmessage=";
+                    String urlmessage = "http://youcal-voice-service:5000/aitts?modelid="+dataBaseService.getModelId(event.getGuild().getId(), user.getId())+"&textmessage=";
                     urlmessage = urlmessage + message.replace(" ", "%20");
                     System.out.println(urlmessage);
                     playvoice(urlmessage, event.getGuild());
@@ -92,18 +92,43 @@ public class BotEventListener extends ListenerAdapter{
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         //super.onSlashCommandInteraction(event);
+        String userId;
+        String guildId;
+        String modelId;
+        int macroNum;
+        int rst;
         switch (event.getName()){
             case "test":
                 event.reply("test command!").queue();
                 break;
             case "setvoice":
-                String userId = event.getMember().getId();
-                String guildId = event.getGuild().getId();
-                String modelId = event.getOption("modelid", OptionMapping::getAsString);
+                userId = event.getMember().getId();
+                guildId = event.getGuild().getId();
+                modelId = event.getOption("modelid", OptionMapping::getAsString);
                 System.out.println(guildId +" "+userId+" "+modelId);
-                int rst = dataBaseService.addModelId(guildId, userId, modelId);
+                rst = dataBaseService.addModelId(guildId, userId, modelId);
                 if(rst == 0) event.reply("invalid model id.").queue();
                 else event.reply("successfully change your model to "+dataBaseService.nowModel(guildId, userId)).queue();
+                break;
+            case "setmacro":
+                userId = event.getMember().getId();
+                modelId = event.getOption("modelid", OptionMapping::getAsString);
+                macroNum = Integer.parseInt(event.getOption("macronumber", OptionMapping::getAsString));
+                rst = dataBaseService.setMacro(userId, macroNum, modelId);
+                if(rst == 0) event.reply("invalid model id.").queue();
+                else event.reply("successfully register model " +dataBaseService.getModelDec(modelId) + "to macronumber "+ String.valueOf(macroNum)).queue();
+                break;
+            case "changevoice":
+                userId = event.getMember().getId();
+                guildId = event.getGuild().getId();
+                macroNum = Integer.parseInt(event.getOption("macronumber", OptionMapping::getAsString));
+                rst = dataBaseService.changeModel(guildId, userId, macroNum);
+                if(rst == 0) event.reply("invalid model id.").queue();
+                else event.reply("successfully change your model to "+dataBaseService.nowModel(guildId, userId)).queue();
+                break;
+            case "getmacro":
+                userId = event.getMember().getId();
+                event.reply(dataBaseService.getMacro(userId)).queue();
                 break;
         }
     }
