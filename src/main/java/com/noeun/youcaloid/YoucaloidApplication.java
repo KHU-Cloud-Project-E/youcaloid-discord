@@ -43,7 +43,8 @@ public class YoucaloidApplication {
 			.addOption(OptionType.INTEGER, "macronumber", "Macro number for selected model", true )
 			.addOption(OptionType.STRING, "modelid", "Id for tts model", true),
 			Commands.slash("changevoice","/changevoice {your macro number}")
-			.addOption(OptionType.INTEGER, "macronumber", "Macro number for selected model", true)
+			.addOption(OptionType.INTEGER, "macronumber", "Macro number for selected model", true),
+			Commands.slash("getmacro", "get your registered macro model")
 		).queue();
 	}
 	

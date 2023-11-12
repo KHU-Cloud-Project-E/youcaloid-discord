@@ -126,6 +126,10 @@ public class BotEventListener extends ListenerAdapter{
                 if(rst == 0) event.reply("invalid model id.").queue();
                 else event.reply("successfully change your model to "+dataBaseService.nowModel(guildId, userId)).queue();
                 break;
+            case "getmacro":
+                userId = event.getMember().getId();
+                event.reply(dataBaseService.getMacro(userId)).queue();
+                break;
         }
     }
 

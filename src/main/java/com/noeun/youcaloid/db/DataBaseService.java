@@ -1,5 +1,6 @@
 package com.noeun.youcaloid.db;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -105,4 +107,28 @@ public class DataBaseService {
         }
         return 0;
     }
+
+    public String getMacro(String userId){
+        String rString = "";
+        List<MacroType> macros = jdbcTemplate.query(String.format("SELECT macro.MACRONUM, model_info.description FROM macro INNER JOIN model_info ON macro.MODELID = model_info.MODELID WHERE macro.USERID = %s", userId),
+        new RowMapper<MacroType>(){
+            @Override
+            public MacroType mapRow(ResultSet rs, int rowNum) throws SQLException {
+                MacroType macroType = new MacroType();
+                macroType.setMacroNum(rs.getString("macro.MACRONUM"));
+                macroType.setModelDec(rs.getString("model_info.description"));
+                return macroType;
+            }
+        });
+        if(macros.isEmpty()){
+            rString = "macro not found";
+        }else{
+            for(MacroType m : macros){
+                rString = rString + String.format("%s : %s\n", m.getMacroNum(), m.getModelDec());
+            }
+        }
+        return rString;
+    }
+
+
 }
