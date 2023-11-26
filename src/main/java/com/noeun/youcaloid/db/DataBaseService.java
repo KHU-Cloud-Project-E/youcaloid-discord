@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -18,31 +19,44 @@ public class DataBaseService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private String url ="jdbc:mariadb://host.docker.internal:3306/youcaloid";
-    private String name = "myadmin";
-    private String password = "root";
+    private static String url;
+    private static String name;
+    private static String password;
 
-	// @Value("${spring.datasource.url}")
-	// public void setUrlValue(String value){
-	// 	url = "jdbc:mariadb://localhost:3306/youcaloid";
-	// }
+	@Value("${db.url}")
+	public void setUrlValue(String value){
+		url = value;
+	}
 
-    // @Value("${spring.datasource.username}")
-    // public void setNameValue(String value){
-    //     name = "myadmin";
-    // }
+    @Value("${db.username}")
+	public void setNameValue(String value){
+		name = value;
+	}
 
-    // @Value("${spring.datasource.password}")
-    // public void setpwValue(String value){
-    //     password = "root";
-    // }
+    @Value("${db.password}")
+	public void setPasswordValue(String value){
+		password = value;
+	}
+
+    public static String getUrl() {
+        return url;
+    }
+
+    public static String getName(){
+        return name;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
 
     public DataBaseService(){
         MariaDbDataSource dataSource = new MariaDbDataSource();
         try {
-            dataSource.setUrl(url);
-            dataSource.setUser(name);
-            dataSource.setPassword(password);
+            dataSource.setUrl(getUrl());
+            dataSource.setUser(getName());
+            dataSource.setPassword(getPassword());
+            System.out.println("db 연결에 성공한것 같읍니다?");
 
         } catch (SQLException e) {
             System.out.println("db connect fail.");

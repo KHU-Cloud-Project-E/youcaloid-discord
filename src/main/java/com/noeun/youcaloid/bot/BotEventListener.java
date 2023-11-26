@@ -1,8 +1,7 @@
 package com.noeun.youcaloid.bot;
 
-import org.hibernate.mapping.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.noeun.youcaloid.db.DataBaseService;
 
@@ -19,7 +18,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+@Component
 public class BotEventListener extends ListenerAdapter{
+
+    static private String aiServerUrl;
+
+	@Value("${tts.ip}")
+	public void setKeyValue(String value){
+		aiServerUrl = value;
+	}
 
     private HashMap<AudioManager, Date> connectTime;
 
@@ -75,7 +82,7 @@ public class BotEventListener extends ListenerAdapter{
             String audioChannelId = audioManager.getConnectedChannel().getId();
             connectTime.put(audioManager, new Date());
                 if( audioManager.isConnected() && connectedChannel.getId().equals(audioChannelId)){
-                    String urlmessage = "http://youcal-voice-service:5000/aitts?modelid="+dataBaseService.getModelId(event.getGuild().getId(), user.getId())+"&textmessage=";
+                    String urlmessage = aiServerUrl + "aitts?modelid="+dataBaseService.getModelId(event.getGuild().getId(), user.getId())+"&textmessage=";
                     urlmessage = urlmessage + message.replace(" ", "%20");
                     System.out.println(urlmessage);
                     playvoice(urlmessage, event.getGuild());

@@ -1,5 +1,12 @@
-{"properties": [{
-  "name": "bot.key",
-  "type": "java.lang.String",
-  "description": "private key for discode bot."
-}]}
+{"properties": [
+  {
+    "name": "bot.key",
+    "type": "java.lang.String",
+    "description": "private key for discode bot."
+  },
+  {
+    "name": "tts.ip",
+    "type": "java.lang.String",
+    "description": "A description for 'tts.ip'"
+  }
+]}
