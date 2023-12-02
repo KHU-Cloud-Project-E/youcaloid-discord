@@ -83,13 +83,13 @@ public class DataBaseService {
 
     public String nowModel(String guildId, String userId){
         return jdbcTemplate.queryForList(
-            String.format("SELECT model_info.DESCRIPTION FROM user_info INNER JOIN model_info ON user_info.MODELID = model_info.MODELID WHERE GUILDID = %s AND USERID = %s",guildId,userId)
+            String.format("SELECT model_info.NAME FROM user_info INNER JOIN model_info ON user_info.MODELID = model_info.MODELID WHERE GUILDID = %s AND USERID = %s",guildId,userId)
             , String.class).get(0);
     }
 
     public String getModelDec(String modelId){
          return jdbcTemplate.queryForList(
-            String.format("SELECT DESCRIPTION FROM model_info WHERE MODELID = %s", modelId)
+            String.format("SELECT NAME FROM model_info WHERE MODELID = %s", modelId)
             , String.class).get(0);
     }
 
@@ -124,13 +124,13 @@ public class DataBaseService {
 
     public String getMacro(String userId){
         String rString = "";
-        List<MacroType> macros = jdbcTemplate.query(String.format("SELECT macro.MACRONUM, model_info.description FROM macro INNER JOIN model_info ON macro.MODELID = model_info.MODELID WHERE macro.USERID = %s", userId),
+        List<MacroType> macros = jdbcTemplate.query(String.format("SELECT macro.MACRONUM, model_info.NAME FROM macro INNER JOIN model_info ON macro.MODELID = model_info.MODELID WHERE macro.USERID = %s", userId),
         new RowMapper<MacroType>(){
             @Override
             public MacroType mapRow(ResultSet rs, int rowNum) throws SQLException {
                 MacroType macroType = new MacroType();
                 macroType.setMacroNum(rs.getString("macro.MACRONUM"));
-                macroType.setModelDec(rs.getString("model_info.description"));
+                macroType.setModelDec(rs.getString("model_info.NAME"));
                 return macroType;
             }
         });
