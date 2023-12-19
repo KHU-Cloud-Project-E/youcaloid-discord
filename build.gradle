@@ -21,7 +21,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.3'
+	implementation 'com.mysql:mysql-connector-j'
 	implementation("net.dv8tion:JDA:5.0.0-beta.11")
 	implementation 'com.sedmelluq:lavaplayer:1.3.77'
 

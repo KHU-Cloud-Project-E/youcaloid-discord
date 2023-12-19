@@ -6,13 +6,14 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+
+import com.mysql.cj.jdbc.MysqlDataSource;
 
 @Component
 public class DataBaseService {
@@ -51,14 +52,14 @@ public class DataBaseService {
     }
 
     public DataBaseService(){
-        MariaDbDataSource dataSource = new MariaDbDataSource();
+        MysqlDataSource dataSource = new MysqlDataSource();
         try {
             dataSource.setUrl(getUrl());
             dataSource.setUser(getName());
             dataSource.setPassword(getPassword());
             System.out.println("db 연결에 성공한것 같읍니다?");
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("db connect fail.");
             e.printStackTrace();
         }
